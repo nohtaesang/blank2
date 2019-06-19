@@ -1,12 +1,5 @@
 import { put, takeLatest } from 'redux-saga/effects';
-import {
-	userActionConstant as uac,
-	LoginType,
-	loginSuccess,
-	loginFail,
-	logoutSuccess,
-	LogoutType
-} from '../actions/user';
+import { userActionConst as uac, LoginType, loginSuccess, loginFail, logoutSuccess, LogoutType } from '../actions/user';
 
 export function* watchLogin() {
 	yield takeLatest(uac.LOGIN, login);
@@ -18,10 +11,10 @@ function* login(action: LoginType) {
 		yield put(loginFail());
 	} else {
 		const res = {
-			id: 0,
+			id: '1',
 			email: 'nohtaesang@naver.com',
 			password: '1234',
-			subjectIdList: [ 0, 1 ]
+			subjectIdList: [ '0', '1' ]
 		};
 		yield put(loginSuccess(res));
 	}

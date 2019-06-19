@@ -12,6 +12,8 @@
 		"@types/redux-logger": "^3.0.7",
 		"@types/redux-saga": "^0.10.5",
 		"babel-plugin-module-resolver": "^3.2.0",
+		"guid-typescript": "^1.0.9",
+		"node-sass": "^4.12.0",
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6",
 		"react-redux": "^7.1.0",

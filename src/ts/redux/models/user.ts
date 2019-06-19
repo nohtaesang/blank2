@@ -1,11 +1,10 @@
 export type UserType = {
-	id: number;
+	id: string;
 	email: string;
 	password: string;
-	subjectIdList: number[];
 };
 
 export type UserStateType = {
 	user: UserType | null;
-	loginState: string;
+	initUser: Boolean;
 };
