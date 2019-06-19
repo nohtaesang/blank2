@@ -17,6 +17,7 @@ function* getUserData(action: GetUserDataType) {
 			subjectList[subject.id] = subject;
 		}
 	});
+
 	questionTable.forEach((question) => {
 		if (question.userId === action.payload) {
 			allQuestionList[question.id] = question;

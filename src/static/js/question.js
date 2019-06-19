@@ -45,7 +45,7 @@ export default [
         무덤 위에 파란 잔디가 피어나듯이
         내 이름자 묻힌 언덕 위에도
         자랑처럼 풀이 무성할 게외다.`,
-		selectedIndexList: [ 0, 3, 6 ]
+		selIndexList: { 1: true, 10: true }
 	},
 	{
 		id: '2',
@@ -56,7 +56,7 @@ export default [
 		name: '눈 오는 지도',
 		text: `순이가 떠난다는 아침에 말못할 마음으로 함박눈이 나려, 슬픈 것처럼 창밖에 아득히 깔린 지도 위에 덮힌다.
         방안을 돌아다보아야 아무도 없다. 벽과 천정이 하얗다. 방안에까지 눈이 나리는 것일까, 정말 너는 잃어버린 역사처럼 홀홀이 가는 것이냐, 떠나기 전에 일러둘 말이 있던 것을 편지를 써서도 네가 가는 곳을 몰라 어느 거리, 어느 마을, 어느 지붕 밑, 너는 내 마음 속에만 남아 있는 것이냐, 네 쪼고만 발자욱을 눈이 자꾸 나려 덮혀 따라갈 수도 없다. 눈이 녹으면 남은 발자욱 자리마다 꽃이 피리니 꽃 사이로 발자욱을 찾아 나서면 일년 열두 달 하냥 내 마음에는 눈이 나리리라.`,
-		selectedIndexList: []
+		selIndexList: {}
 	},
 	{
 		id: '3',
@@ -75,7 +75,7 @@ export default [
         걸어가야겠다.
         
         오늘밤에도 별이 바람에 스치운다`,
-		selectedIndexList: []
+		selIndexList: {}
 	},
 	{
 		id: '4',
@@ -98,7 +98,7 @@ export default [
         
         내 경건한 마음을 모셔들여
         노아 때 하늘을 한 모금 마시다.`,
-		selectedIndexList: []
+		selIndexList: {}
 	},
 	{
 		id: '5',
@@ -116,7 +116,7 @@ export default [
         밭머리에서 어정거리고
         손가락 너어는 아이는
         할머니 뒤만 따른다`,
-		selectedIndexList: []
+		selIndexList: {}
 	},
 	{
 		id: '6',
@@ -126,6 +126,6 @@ export default [
 		mode: 'done',
 		name: '다른유저',
 		text: `다른유저`,
-		selectedIndexList: [ 0 ]
+		selIndexList: {}
 	}
 ];

@@ -6,7 +6,11 @@ export type QuestionType = {
 	mode: string;
 	name: string;
 	text: string;
-	selectedIndexList: number[];
+	selIndexList: SelIndexList;
+};
+
+export type SelIndexList = {
+	[key: number]: boolean | undefined; // TODO: 왜 undefined를 해야하는가...
 };
 
 export type QuestionMap = {

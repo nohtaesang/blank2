@@ -83,6 +83,21 @@
 					width: 800px;
 					margin: 11px;
 					border: dotted 1px green;
+					.edit-wrap {
+						margin: 11px;
+						border: dotted 1px royalblue;
+						.question {
+							margin: 11px;
+							border: 1px dotted rebeccapurple;
+							.question-text {
+								display: flex;
+								flex-direction: row;
+								flex-wrap: wrap;
+								.done-text {
+								}
+							}
+						}
+					}
 				}
 			}
 		}

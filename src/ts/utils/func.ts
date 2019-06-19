@@ -1,9 +1,16 @@
 import { SubjectType } from 'ts/redux/models/subject';
+import { QuestionType } from 'ts/redux/models/question';
 
 export const copySubjectList = (subjectList: SubjectType[]): SubjectType[] => {
 	const nextSubjectList: SubjectType[] = [];
 	subjectList.forEach((subject) => nextSubjectList.push(clone(subject)));
 	return nextSubjectList;
+};
+
+export const copyQuestionList = (questionList: QuestionType[]): QuestionType[] => {
+	const nextQuestionList: QuestionType[] = [];
+	questionList.forEach((question) => nextQuestionList.push(clone(question)));
+	return nextQuestionList;
 };
 
 export const clone = <T extends {}>(obj: T) => {

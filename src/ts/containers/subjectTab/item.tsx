@@ -22,7 +22,7 @@ type OwnProps = {
 const Item: FunctionComponent<OwnProps> = (props) => {
 	// store
 	const { userReducer, sessionReducer } = useSelector((state: State) => state);
-	const { allQuestionList, selQuestionList } = sessionReducer;
+	const { allQuestionList, selQuestionList, selSubjectId } = sessionReducer;
 	// action
 	const dispatch = useDispatch();
 	// props
@@ -33,6 +33,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 
 	// 1. tab 을 눌렀을 경우 selSubjectId를 설정한다.
 	const onClickItem = () => {
+		if (selSubjectId === subject.id) return;
 		dispatch({ type: sessionActionConst.SET_SEL_SUBECT_ID, payload: subject.id });
 	};
 
