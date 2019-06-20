@@ -4,6 +4,7 @@ import { Guid } from 'guid-typescript';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from 'ts/redux/reducers';
 // actions
+import { sessionActionConst } from 'ts/redux/actions/session';
 import { userActionConst } from 'ts/redux/actions/user';
 import { subjectActionConstant } from 'ts/redux/actions/subject';
 // models
@@ -13,7 +14,7 @@ import { QuestionMap } from 'ts/redux/models/session';
 // components
 import Item from './item';
 // utils
-import { copyQuestionList } from 'ts/utils/func';
+import { copyQuestionList, clone } from 'ts/utils/func';
 
 type OwnProps = {};
 
@@ -84,13 +85,26 @@ const Temp: FunctionComponent<OwnProps> = (props) => {
 		setCurQuestionList(nextCurQuestionList);
 	};
 
-	// 2-2 question에서 수정한 값을 가져온다. (question 마다 save를 누르면 발동!)
+	// 2-2 question에서 수정한 값을 가져온다.
 	// 2-2-1 name
-	const getChangedName = (idx: number, name: string): void => {};
+	const getChangedName = (idx: number, name: string): void => {
+		const nextCurQuestionList = copyQuestionList(curQuestionList);
+		nextCurQuestionList[idx].name = name;
+		setCurQuestionList(nextCurQuestionList);
+	};
 	// 2-2-2 text
-	const getChangedText = (idx: number, text: string): void => {};
+	const getChangedText = (idx: number, text: string): void => {
+		const nextCurQuestionList = copyQuestionList(curQuestionList);
+		console.log(text);
+		nextCurQuestionList[idx].text = text;
+		setCurQuestionList(nextCurQuestionList);
+	};
 	// 2-2-3 selIndexList
-	const getChangedSelIndexList = (idx: number, selIndexList: SelIndexListType): void => {};
+	const getChangedSelIndexList = (idx: number, selIndexList: SelIndexListType): void => {
+		const nextCurQuestionList = copyQuestionList(curQuestionList);
+		nextCurQuestionList[idx].selIndexList = selIndexList;
+		setCurQuestionList(nextCurQuestionList);
+	};
 
 	// 2-3 question 에서 실시간으로 변하는 값을 가져온다.
 	// 2-3-1 ordering
@@ -144,10 +158,40 @@ const Temp: FunctionComponent<OwnProps> = (props) => {
 	const onClickSave = () => {
 		setIsEdit(false);
 		setIsSave(true);
-		setBackupQuestionList(copyQuestionList(curQuestionList));
 
-		console.log(backupQuestionList, curQuestionList);
+		setBackupQuestionList(copyQuestionList(curQuestionList));
+		const nextAllQuestionList = clone(allQuestionList),
+			postList: QuestionMap = {},
+			putList: QuestionMap = {},
+			deleteList: QuestionMap = {};
+		curQuestionList.forEach((cur) => {
+			const isExist = backupQuestionList.some((back) => cur.id === back.id);
+			if (isExist) {
+				putList[cur.id] = cur;
+			} else {
+				postList[cur.id] = cur;
+			}
+			nextAllQuestionList[cur.id] = cur;
+		});
+
+		backupQuestionList.forEach((back) => {
+			const isExist = curQuestionList.some((cur) => back.id === cur.id);
+			if (!isExist) {
+				deleteList[back.id] = back;
+				delete nextAllQuestionList[back.id];
+			}
+		});
+		console.log(nextAllQuestionList);
+		dispatch({
+			type: sessionActionConst.SAVE_QUESTION_LIST,
+			payload: { allQuestionList: nextAllQuestionList, postList, putList, deleteList }
+		});
 	};
+
+	const getQuestion = (question: QuestionType): QuestionType => {
+		return question;
+	};
+
 	useEffect(
 		() => {
 			if (isSave) setIsSave(false);
@@ -168,6 +212,10 @@ const Temp: FunctionComponent<OwnProps> = (props) => {
 						isSave={isSave}
 						onClickOrdering={onClickOrdering}
 						onClickDelete={onClickDelete}
+						getQuestion={getQuestion}
+						getChangedName={getChangedName}
+						getChangedText={getChangedText}
+						getChangedSelIndexList={getChangedSelIndexList}
 					/>
 				))}
 			</div>

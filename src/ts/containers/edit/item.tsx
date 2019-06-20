@@ -21,6 +21,10 @@ type OwnProps = {
 	isSave: boolean;
 	onClickOrdering(idx: number, dir: string): void;
 	onClickDelete(idx: number): void;
+	getQuestion(question: QuestionType): QuestionType;
+	getChangedName(idx: number, name: string): void;
+	getChangedText(idx: number, text: string): void;
+	getChangedSelIndexList(idx: number, selIndexList: SelIndexListType): void;
 };
 
 type TextArrType = {
@@ -34,7 +38,18 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 	// action
 	const dispatch = useDispatch();
 	// props
-	const { question, idx, isEdit, isCancel, isSave, onClickOrdering, onClickDelete } = props;
+	const {
+		question,
+		idx,
+		isEdit,
+		isCancel,
+		isSave,
+		onClickOrdering,
+		onClickDelete,
+		getChangedName,
+		getChangedText,
+		getChangedSelIndexList
+	} = props;
 	const { text, name, selIndexList } = question;
 	// state
 	const [ curQuesiton, setCurQuestion ] = useState<QuestionType>(question);
@@ -70,7 +85,6 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 			if (!isCancel) return;
 			setCurName(backupName);
 			setCurText(backupText);
-
 			setCurSelIndexList(backupSelIndexList);
 		},
 		[ isCancel ]
@@ -131,6 +145,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 
 	const onChangeCurText = (e: any) => {
 		setCurText(e.target.value);
+		getChangedText(idx, e.target.value);
 	};
 
 	// 1-2. select
@@ -145,6 +160,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 			nextSelIndexList[i] = true;
 		}
 		setCurSelIndexList(nextSelIndexList);
+		getChangedSelIndexList(idx, nextSelIndexList);
 	};
 
 	// 1-3. done
@@ -159,6 +175,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 	// 1-4.
 	const onChangeCurName = (e: any) => {
 		setCurName(e.target.value);
+		getChangedName(idx, e.target.value);
 	};
 
 	const onClickCancel = () => {
@@ -166,6 +183,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 		setCurText(backupText);
 		textToArr(backupText);
 		setCurName(backupName);
+		getChangedName(idx, backupName);
 		setCurSelIndexList(backupSelIndexList);
 	};
 
