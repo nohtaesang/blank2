@@ -13,7 +13,6 @@ type OwnProps = {
 	subject: SubjectType;
 	idx: number;
 	isEdit: boolean;
-	isCancel: boolean;
 	onClickOrdering(idx: number, dir: string): void;
 	getChangedName(idx: number, name: string): void;
 	onClickDelete(idx: number): void;
@@ -26,9 +25,9 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 	// action
 	const dispatch = useDispatch();
 	// props
-	const { subject, idx, isEdit, isCancel, onClickOrdering, getChangedName, onClickDelete } = props;
+	const { subject, idx, isEdit, onClickOrdering, getChangedName, onClickDelete } = props;
 	// states
-	const [ name, setName ] = useState<string>(subject.name);
+	const [ curName, setCurName ] = useState<string>(subject.name);
 	const [ backupName, setBackupName ] = useState<string>('');
 
 	// 1. tab 을 눌렀을 경우 selSubjectId를 설정한다.
@@ -51,15 +50,15 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 	// => 수정이 취소되었을 때
 	useEffect(
 		() => {
-			if (subject.name === name) return;
-			setName(subject.name);
+			if (subject.name === curName) return;
+			setCurName(subject.name);
 		},
 		[ subject.name ]
 	);
 
 	// 2-3. 이름을 변경하는 handler
 	const onChangeName = (e: any) => {
-		setName(e.target.value);
+		setCurName(e.target.value);
 		getChangedName(idx, e.target.value);
 	};
 
@@ -71,7 +70,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 				</button>
 			) : (
 				<div className="subject-edit-form">
-					<input value={name} onChange={onChangeName} />
+					<input value={curName} onChange={onChangeName} />
 					<div className="subject-order-btn-wrap">
 						<i className="xi-angle-up-min subject-order-btn" onClick={() => onClickOrdering(idx, 'up')} />
 						<i

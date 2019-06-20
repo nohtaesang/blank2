@@ -6,12 +6,14 @@ import { State } from 'ts/redux/reducers';
 import { userActionConst } from 'ts/redux/actions/user';
 import { subjectActionConstant } from 'ts/redux/actions/subject';
 // models
-import { SelIndexList } from 'ts/redux/models/question';
+import { QuestionType } from 'ts/redux/models/question';
 // components
 
 type OwnProps = {
-	textArr: string[];
-	selIndexList: object;
+	curText: string;
+	setCurText(text: string): void;
+	setMode(mode: string): void;
+	onClickCancel(): void;
 };
 
 const Temp: FunctionComponent<OwnProps> = (props) => {
@@ -20,16 +22,22 @@ const Temp: FunctionComponent<OwnProps> = (props) => {
 	// action
 	const dispatch = useDispatch();
 	// props
-	const { textArr, selIndexList } = props;
-	console.log(textArr, selIndexList);
+	const { curText, setCurText, setMode, onClickCancel } = props;
+	// states
+
+	const onChangeText = (e: any) => {
+		setCurText(e.target.value);
+	};
+
+	const onClickSelect = () => {
+		setMode('select');
+	};
 
 	return (
-		<div className="question-text">
-			{textArr.map((word, i) => (
-				<div key={i} className={`done-text`}>
-					{word}
-				</div>
-			))}
+		<div>
+			<textarea value={curText} onChange={onChangeText} />
+			<button onClick={onClickSelect}>select으로</button>
+			<button onClick={onClickCancel}>수정 취소</button>
 		</div>
 	);
 };

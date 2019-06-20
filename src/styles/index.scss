@@ -89,11 +89,57 @@
 						.question {
 							margin: 11px;
 							border: 1px dotted rebeccapurple;
-							.question-text {
+							.question-wrap {
+								margin: 11px;
+								border: 1px dotted black;
 								display: flex;
-								flex-direction: row;
-								flex-wrap: wrap;
-								.done-text {
+								flex-direction: column;
+								align-items: flex-start;
+								.question-title {
+								}
+								.question-title.input {
+								}
+								.question-textarea {
+									width: 100%;
+									min-height: 150px;
+								}
+
+								.question-text {
+									display: flex;
+									flex-direction: row;
+									flex-wrap: wrap;
+
+									.text {
+										&.space {
+											width: 5px;
+										}
+										&.enter {
+											width: 100%;
+										}
+										&.sel {
+											background: grey;
+										}
+									}
+									.keyword-btn {
+										margin: 6px;
+										color: grey;
+										&:hover {
+											color: black;
+											font-weight: bold;
+										}
+										&.sel {
+											color: black;
+											font-weight: bold;
+										}
+									}
+								}
+								.question.option {
+								}
+							}
+							.question-list-option {
+								.question-order-btn-wrap {
+								}
+								.question-delete-btn {
 								}
 							}
 						}

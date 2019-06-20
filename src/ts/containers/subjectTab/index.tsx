@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { State } from 'ts/redux/reducers';
 // models
 import { SubjectType } from 'ts/redux/models/subject';
+// actions
+import { sessionActionConst } from 'ts/redux/actions/session';
 // components
 import Item from './item';
 // func
@@ -17,11 +19,12 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 	const { userReducer, sessionReducer } = useSelector((state: State) => state);
 	const { user } = userReducer;
 	const { subjectList } = sessionReducer;
+	// action
+	const dispatch = useDispatch();
 	// state
 	const [ curSubjectList, setCurSubjectList ] = useState<SubjectType[]>([]);
 	const [ backupSubjectList, setBackupSubjectList ] = useState<SubjectType[]>([]);
 	const [ isEdit, setIsEdit ] = useState(false);
-	const [ isCancel, setIsCacnel ] = useState(false);
 
 	// 1. subjectList가 불러와지면, curSubjectList와 backupSubjectList를 설정한다.
 	useEffect(
@@ -62,26 +65,29 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 
 	// 2-3. item의 순서를 변경한다.
 	const onClickOrdering = (idx: number, dir: string) => {
-		const nextCurSubjectList = curSubjectList.slice();
-
 		if (dir === 'up') {
 			if (idx === 0) return;
+			const nextCurSubjectList = curSubjectList.slice();
+
 			nextCurSubjectList[idx].order = idx - 1;
 			nextCurSubjectList[idx - 1].order = idx;
 			[ nextCurSubjectList[idx], nextCurSubjectList[idx - 1] ] = [
 				nextCurSubjectList[idx - 1],
 				nextCurSubjectList[idx]
 			];
+			setCurSubjectList(nextCurSubjectList);
 		} else {
 			if (idx === curSubjectList.length - 1) return;
+			const nextCurSubjectList = curSubjectList.slice();
+
 			nextCurSubjectList[idx].order = idx + 1;
 			nextCurSubjectList[idx + 1].order = idx;
 			[ nextCurSubjectList[idx], nextCurSubjectList[idx + 1] ] = [
 				nextCurSubjectList[idx + 1],
 				nextCurSubjectList[idx]
 			];
+			setCurSubjectList(nextCurSubjectList);
 		}
-		setCurSubjectList(nextCurSubjectList);
 	};
 
 	// 2-4. item 을 삭제한다.
@@ -93,27 +99,23 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 
 	// 3. 수정 사항을 저장한다.
 	// 현재 사항을 backupSubjectList에 저장한다.
+	// subjectList 에 반영한다.
+	// db에 반영한다.
 	const onClickSave = () => {
 		setIsEdit(false);
-		setBackupSubjectList(copySubjectList(curSubjectList));
+		const nextCurSubjectList = copySubjectList(curSubjectList);
+		setBackupSubjectList(nextCurSubjectList);
+		dispatch({
+			type: sessionActionConst.SAVE_SUBJECT_LIST,
+			payload: { subjectList: nextCurSubjectList, postList: {}, putList: {}, deleteList: {} }
+		});
 	};
 
 	// 4. 수정 사항을 취소한다.
 	const onClickCancel = () => {
 		setIsEdit(false);
 		setCurSubjectList(copySubjectList(backupSubjectList));
-		setIsCacnel(true);
 	};
-
-	// 3-1. isCancel은 item에서 true가 되면 수정중이었던 이름을 원래대로 되돌리는데 사용된다.
-	// isCancel을 다시 false로 되돌린다.
-	useEffect(
-		() => {
-			if (!isCancel) return;
-			setIsCacnel(false);
-		},
-		[ isCancel ]
-	);
 
 	return curSubjectList ? (
 		<div className="subject-tab">
@@ -124,7 +126,6 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 						subject={subject}
 						idx={idx}
 						isEdit={isEdit}
-						isCancel={isCancel}
 						onClickOrdering={onClickOrdering}
 						getChangedName={getChangedName}
 						onClickDelete={onClickDelete}
@@ -133,7 +134,7 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 			</div>
 			<div className="subject-option-wrap">
 				{!isEdit ? (
-					<button onClick={onClickEdit}>수정 </button>
+					<button onClick={onClickEdit}>수정</button>
 				) : (
 					<Fragment>
 						<button onClick={onClickSave}>저장</button>

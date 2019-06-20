@@ -4,7 +4,9 @@ import {
 	GetUserDataSuccessType,
 	SetSelSubjectType,
 	SetSelQuestionListType,
-	SetSelSubjectIdType
+	SetSelSubjectIdType,
+	SaveSubjectListType,
+	SaveQuestionListType
 } from '../actions/session';
 
 import { SessionStateType } from '../models/session';
@@ -30,6 +32,18 @@ export default (state = initialState, action: SessionActionType): SessionStateTy
 			return { ...state, selQuestionList: (action as SetSelQuestionListType).payload };
 		case sessionActionConst.SET_SEL_SUBECT_ID:
 			return { ...state, selSubjectId: (action as SetSelSubjectIdType).payload };
+		case sessionActionConst.SAVE_SUBJECT_LIST:
+			console.log(action);
+			return { ...state, subjectList: (action as SaveSubjectListType).payload.subjectList };
+		case sessionActionConst.SAVE_SUBJECT_LIST_SUCCESS:
+			return { ...state };
+		case sessionActionConst.SAVE_QUESTION_LIST:
+			return {
+				...state,
+				allQuestionList: (action as SaveQuestionListType).payload.allQuestionList
+			};
+		case sessionActionConst.SAVE_QUESTION_LIST_SUCCESS:
+			return { ...state };
 		default:
 			return state;
 	}
