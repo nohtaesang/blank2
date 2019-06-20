@@ -5,8 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { State } from 'ts/redux/reducers';
 // actions
 import { sessionActionConst } from 'ts/redux/actions/session';
-import { userActionConst } from 'ts/redux/actions/user';
-import { subjectActionConstant } from 'ts/redux/actions/subject';
 // models
 import { SubjectType } from 'ts/redux/models/subject';
 import { QuestionType, SelIndexListType } from 'ts/redux/models/question';
@@ -18,7 +16,7 @@ import { copyQuestionList, clone } from 'ts/utils/func';
 
 type OwnProps = {};
 
-const Temp: FunctionComponent<OwnProps> = (props) => {
+const Temp: FunctionComponent<OwnProps> = () => {
 	// store
 	const { userReducer, sessionReducer } = useSelector((state: State) => state);
 	const { user } = userReducer;
@@ -28,7 +26,6 @@ const Temp: FunctionComponent<OwnProps> = (props) => {
 	// state
 	const [ _mount, _setMount ] = useState<boolean>(false);
 
-	const [ curSubject, setCurSubject ] = useState<SubjectType | null>(null);
 	const [ curQuestionList, setCurQuestionList ] = useState<QuestionType[]>([]);
 	const [ backupQuestionList, setBackupQuestionList ] = useState<QuestionType[]>([]);
 
@@ -48,7 +45,6 @@ const Temp: FunctionComponent<OwnProps> = (props) => {
 	useEffect(
 		() => {
 			if (!selSubjectId) return;
-			setCurSubject(subjectList[selSubjectId]);
 
 			let nextCurQuestionList = Object.values(allQuestionList)
 				.filter((question) => question.subjectId === selSubjectId)
@@ -95,7 +91,6 @@ const Temp: FunctionComponent<OwnProps> = (props) => {
 	// 2-2-2 text
 	const getChangedText = (idx: number, text: string): void => {
 		const nextCurQuestionList = copyQuestionList(curQuestionList);
-		console.log(text);
 		nextCurQuestionList[idx].text = text;
 		setCurQuestionList(nextCurQuestionList);
 	};
@@ -181,7 +176,6 @@ const Temp: FunctionComponent<OwnProps> = (props) => {
 				delete nextAllQuestionList[back.id];
 			}
 		});
-		console.log(nextAllQuestionList);
 		dispatch({
 			type: sessionActionConst.SAVE_QUESTION_LIST,
 			payload: { allQuestionList: nextAllQuestionList, postList, putList, deleteList }

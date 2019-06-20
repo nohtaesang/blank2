@@ -25,6 +25,7 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 	const [ curSubjectList, setCurSubjectList ] = useState<SubjectType[]>([]);
 	const [ backupSubjectList, setBackupSubjectList ] = useState<SubjectType[]>([]);
 	const [ isEdit, setIsEdit ] = useState(false);
+	const [ isCancel, setIsCancel ] = useState(false);
 
 	// 1. subjectList가 불러와지면, curSubjectList와 backupSubjectList를 설정한다.
 	useEffect(
@@ -114,8 +115,16 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 	// 4. 수정 사항을 취소한다.
 	const onClickCancel = () => {
 		setIsEdit(false);
+		setIsCancel(true);
 		setCurSubjectList(copySubjectList(backupSubjectList));
 	};
+
+	useEffect(
+		() => {
+			if (isCancel) setIsCancel(false);
+		},
+		[ isCancel ]
+	);
 
 	return curSubjectList ? (
 		<div className="subject-tab">

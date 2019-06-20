@@ -33,7 +33,6 @@ export default (state = initialState, action: SessionActionType): SessionStateTy
 		case sessionActionConst.SET_SEL_SUBECT_ID:
 			return { ...state, selSubjectId: (action as SetSelSubjectIdType).payload };
 		case sessionActionConst.SAVE_SUBJECT_LIST:
-			console.log(action);
 			return { ...state, subjectList: (action as SaveSubjectListType).payload.subjectList };
 		case sessionActionConst.SAVE_SUBJECT_LIST_SUCCESS:
 			return { ...state };
