@@ -103,6 +103,7 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 	// subjectList 에 반영한다.
 	// db에 반영한다.
 	const onClickSave = () => {
+		if (!isEdit) return;
 		setIsEdit(false);
 		const nextCurSubjectList = copySubjectList(curSubjectList);
 		setBackupSubjectList(nextCurSubjectList);
@@ -114,6 +115,7 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 
 	// 4. 수정 사항을 취소한다.
 	const onClickCancel = () => {
+		if (!isEdit) return;
 		setIsEdit(false);
 		setIsCancel(true);
 		setCurSubjectList(copySubjectList(backupSubjectList));
@@ -135,6 +137,7 @@ const SubjectTab: FunctionComponent<OwnProps> = (props) => {
 						subject={subject}
 						idx={idx}
 						isEdit={isEdit}
+						isCancel={isCancel}
 						onClickOrdering={onClickOrdering}
 						getChangedName={getChangedName}
 						onClickDelete={onClickDelete}

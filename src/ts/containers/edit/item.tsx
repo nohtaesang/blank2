@@ -54,6 +54,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 	// state
 	const [ curQuesiton, setCurQuestion ] = useState<QuestionType>(question);
 	const [ backupQuestion, setBackupQuestion ] = useState<QuestionType>();
+	const [ initData, setInitData ] = useState({ name, text, selIndexList });
 	const [ curName, setCurName ] = useState(name);
 	const [ backupName, setBackupName ] = useState(name);
 	const [ curText, setCurText ] = useState(text);
@@ -72,20 +73,8 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 
 	useEffect(
 		() => {
-			if (mode === 'input') {
-			} else if (mode === 'select') {
-			} else if (mode === 'done') {
-			}
-		},
-		[ mode ]
-	);
-
-	useEffect(
-		() => {
 			if (!isCancel) return;
-			setCurName(backupName);
-			setCurText(backupText);
-			setCurSelIndexList(backupSelIndexList);
+			reset();
 		},
 		[ isCancel ]
 	);
@@ -93,12 +82,29 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 	useEffect(
 		() => {
 			if (!isSave) return;
-			setBackupName(curName);
-			setBackupText(curText);
-			setCurSelIndexList(curSelIndexList);
+			setInitData({ name: curName, text: curText, selIndexList: curSelIndexList });
+			backup();
 		},
 		[ isSave ]
 	);
+
+	const reset = () => {
+		const { name, text, selIndexList } = initData;
+		console.log(text);
+		setCurName(name);
+		getChangedName(idx, name);
+
+		setCurText(text);
+		textToArr(text);
+
+		setCurSelIndexList(selIndexList);
+	};
+
+	const backup = () => {
+		setBackupName(curName);
+		setBackupText(curText);
+		setBackupSelIndexList(curSelIndexList);
+	};
 
 	const textToArr = (text: string) => {
 		const length = text.length;
@@ -139,7 +145,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 	// 1-1. input
 	const onClickSelectInInput = () => {
 		setMode('select');
-		setCurSelIndexList({});
+		setCurSelIndexList({}); // text 수정 후에는 selIndexList를 초기화
 		textToArr(curText);
 	};
 
@@ -151,7 +157,9 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 	// 1-2. select
 	const onClickSaveInSelect = () => {
 		setMode('done');
+		backup();
 	};
+
 	const onClickKeyword = (i: number) => {
 		const nextSelIndexList = clone(curSelIndexList);
 		if (nextSelIndexList[i]) {
@@ -172,6 +180,10 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 		setMode('select');
 	};
 
+	const onClickResetInDone = () => {
+		reset();
+	};
+
 	// 1-4.
 	const onChangeCurName = (e: any) => {
 		setCurName(e.target.value);
@@ -180,10 +192,13 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 
 	const onClickCancel = () => {
 		setMode('done');
-		setCurText(backupText);
-		textToArr(backupText);
+
 		setCurName(backupName);
 		getChangedName(idx, backupName);
+
+		setCurText(backupText);
+		textToArr(backupText);
+
 		setCurSelIndexList(backupSelIndexList);
 	};
 
@@ -241,7 +256,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 						</div>
 					) : (
 						<div className="question-wrap">
-							<input className="question-title-input" value={curName} onChange={onChangeCurName} />
+							<div className="question-title">{curName}</div>
 							<div className="question-text">
 								{textArr.map((word, i) => {
 									const { type, content } = word;
@@ -256,7 +271,7 @@ const Item: FunctionComponent<OwnProps> = (props) => {
 							<div className="question-done-option">
 								<button onClick={onClickInputInDone}>text 수정</button>
 								<button onClick={onClickSelectInDone}>keyword 수정</button>
-								<button onClick={onClickCancel}>수정 전으로</button>
+								<button onClick={onClickResetInDone}>수정 전으로</button>
 							</div>
 						</div>
 					)}

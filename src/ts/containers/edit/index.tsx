@@ -31,11 +31,6 @@ const Temp: FunctionComponent<OwnProps> = () => {
 
 	const [ isEdit, setIsEdit ] = useState<boolean>(false);
 	const [ isCancel, setIsCancel ] = useState<boolean>(false);
-	// isCancel:
-	// subject에서는 name이 실시간으로 curSubjectList 에 적용되서 필요가 없다.
-	// 하지만 question에서는 item 내부에서만 관리되며
-	// 저장 시 그 값을 가져와서 처리해야 하고
-	// 취소 시 취소를 item에 알려야 한다.
 	const [ isSave, setIsSave ] = useState<boolean>(false);
 
 	// 1. selSubjectId가 설정되면,
